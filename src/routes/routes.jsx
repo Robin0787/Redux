@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
-import Tasks from '../pages/Tasks';
 import Chat from '../pages/Chat';
-import Settings from '../pages/Settings';
 import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
+import Tasks from '../pages/Tasks';
+
 const routes = createBrowserRouter([
   {
     path: '/',

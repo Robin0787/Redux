@@ -1,15 +1,20 @@
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useSelector } from "react-redux";
 import AddTaskModal from '../components/tasks/AddTaskModal';
 import MyTasks from '../components/tasks/MyTasks';
 import TaskCard from '../components/tasks/TaskCard';
 
 const Tasks = () => {
   let [isOpenModal, setIsOpenModal] = useState(false);
+  const { tasks } = useSelector((state) => state.tasksSlice);
+  
+  console.log(tasks);
 
-  function closeModal() {
-    setIsOpenModal(false)
-  }
+  const closeModal = useCallback(() => {
+    setIsOpenModal(false);
+  }, []);
+  
   return (
     <div className="h-screen grid grid-cols-12">
       <div className="col-span-9 px-10 pt-10">
@@ -43,7 +48,9 @@ const Tasks = () => {
               </p>
             </div>
             <div className="space-y-3">
-              <TaskCard />
+              {
+                tasks.map(item => <TaskCard key={item.id} item={item}/>)
+              }
             </div>
           </div>
           <div className="relative h-[800px] overflow-auto">
@@ -114,7 +121,7 @@ const Tasks = () => {
         </div>
         <MyTasks />
       </div>
-      <AddTaskModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} closeModal={closeModal}/>
+      <AddTaskModal isOpenModal={isOpenModal} closeModal={closeModal} title={'Add Task'} />
     </div>
   );
 };

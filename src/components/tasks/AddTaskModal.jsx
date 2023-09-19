@@ -1,66 +1,109 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from "react-redux";
+import { addTask } from '../../redux/features/tasks/tasksSlice';
+import Modal from '../Modal/Modal';
 
-export default function AddTaskModal({isOpenModal, setIsOpenModal, closeModal}) {
-  
+export default function AddTaskModal({ isOpenModal, closeModal, title}) {
+  const dispatch = useDispatch();
 
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+
+  const onSubmit = (data) => {
+    dispatch(addTask(data));
+    reset();
+    closeModal();
+  }
 
   return (
-    <>
-      <Transition appear show={isOpenModal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+    <Modal isOpenModal={isOpenModal} title={title} closeModal={closeModal}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col mb-5">
+          <label htmlFor="title" className="mb-2">
+            Title
+          </label>
+          <input
+            className="w-full rounded-md"
+            type="text"
+            id="title"
+            {...register('title')}
+          />
+        </div>
+        <div className="flex flex-col mb-5">
+          <label htmlFor="title" className="mb-2">
+            Description
+          </label>
+          <textarea
+            className="w-full rounded-md"
+            type="text"
+            id="description"
+            {...register('description')}
+          />
+        </div>
+        <div className="flex flex-col mb-5">
+          <label htmlFor="title" className="mb-2">
+            Deadline
+          </label>
+          <input
+            className="w-full rounded-md"
+            type="date"
+            id="date"
+            {...register('date')}
+          />
+        </div>
+        <div className="flex flex-col mb-5">
+          <label htmlFor="title" className="mb-2">
+            Assign to
+          </label>
+          <select
+            className="w-full rounded-md"
+            id="assignedTo"
+            {...register('assignedTo')}
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Payment successful
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
-                  </div>
-
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Got it, thanks!
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
-    </>
+            <option value="Mir Hussain">Mir Hussain</option>
+            <option value="Mezba Abedin">Mezba Abedin</option>
+            <option value="Nahid Hasan">Nahid Hasan</option>
+            <option value="Mizanur Rahman">Mizanur Rahman</option>
+            <option value="Tanmoy Parvez">Tanmoy Parvez</option>
+            <option value="Fahim Ahmed Firoz">Fahim Ahmed Firoz</option>
+            <option value="Rahatul Islam">Rahatul Islam</option>
+            <option value="Samin Israr Ravi">Samin Israr Ravi</option>
+            <option value="Mehedi Anik">Mehedi Anik</option>
+            <option value="Ehtisam Haq">Ehtisam Haq</option>
+            <option value="Anisur Rahman">Anisur Rahman</option>
+            <option value="Muktadir Hasan">Muktadir Hasan</option>
+            <option value="Masud Alam">Masud Alam</option>
+          </select>
+        </div>
+        <div className="flex flex-col mb-5">
+          <label htmlFor="title" className="mb-2">
+            Priority
+          </label>
+          <select
+            className="w-full rounded-md"
+            id="priority"
+            {...register('priority')}
+          >
+            <option defaultValue value="high">
+              High
+            </option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div className="flex gap-3 justify-end">
+          <button
+            onClick={() => { reset(); closeModal() }}
+            type="button"
+            className="btn btn-danger "
+          >
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-primary ">
+            submit
+          </button>
+        </div>
+      </form>
+    </Modal>
   )
 }
